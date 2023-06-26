@@ -38,6 +38,43 @@ let maxFramesY = 3;
 let frameYLocked = 1;
 
 
+//player2
+const playerImage2 = new Image();
+playerImage2.src = './assets/SLKnight/Idle3.png';
+
+let playerLocX2 = 370;
+let playerLocY2 = 500;
+
+let frameX2 = 0;
+let frameY2 = 0;
+
+let maxFramesX2 = 1;
+let maxFramesY2 = 3;
+
+let frameYLocked2 = 1;
+
+
+
+//player objects
+
+const player1 = new fighter({
+    hpStat: 100,
+    attackStat: 10,
+    defenseStat:5,
+    name: "player1",
+    hpTag: 'plhealth3'
+})
+
+const player2 = new fighter({
+    hpStat: 100,
+    attackStat: 10,
+    defenseStat:5,
+    name: "player2",
+    hpTag: 'p2health3'
+})
+
+
+
 
 
 function animate(){
@@ -49,6 +86,13 @@ function animate(){
     ctx.drawImage(backImg3,0,0);
 
     ctx.drawImage(playerImage, frameX * spriteWidth , frameY * spriteHeight, spriteWidth, spriteHeight, playerLocX, playerLocY, spriteWidth*1.5, spriteHeight*1.5);
+
+
+    //second character
+
+
+    ctx.drawImage(playerImage2, frameX2* spriteWidth, frameY2 *spriteHeight, spriteWidth, spriteHeight, playerLocX2, playerLocY2, spriteWidth*1.5, spriteHeight*1.5);
+
 
     //create location variables for drawimage knight replace 50,500 with movement variables positioning
 
@@ -73,7 +117,20 @@ function animate(){
         
     }
 
-    
+    if(gameFrame % staggerFrames == 0){
+        if(frameX2 <maxFramesX2){
+            frameX2++;
+        } 
+        else frameX2 = 0;
+        if(frameYLocked2 == 1){
+            if(frameY2 <maxFramesY2){
+            
+                frameY2++;
+            } 
+            else frameY2 = 0;
+        }
+        
+    }
 
 
     
@@ -122,8 +179,20 @@ document.getElementById('attack1').addEventListener('click', event =>{
         maxFramesX = 1;
         maxFramesY = 3;
         frameYLocked = 1;
+
+        //red animation
+
+        //playerImage2.src = './assets/SLKnight/'
+
+
+
         document.getElementById('attack1').style.display = 'block';
    }, 2000)
+
+
+    //retaliation
+
+
 
 
 
@@ -134,20 +203,6 @@ document.getElementById('attack1').addEventListener('click', event =>{
 
 
 
-
-const player1 = new fighter({
-    hpStat: 100,
-    attackStat: 10,
-    defenseStat:5,
-    name: "player1"
-})
-
-const player2 = new fighter({
-    hpStat: 100,
-    attackStat: 10,
-    defenseStat:5,
-    name: "player2"
-})
 
 
 player1.attack(player2);
