@@ -26,6 +26,13 @@ class fighter{
         console.log(this.name + " strikes his Target! for: " + this.attackStat +"!");
         target.recieveDmg(this.attackStat);
     }
+    heal(){
+
+        let healRoll = 10;
+        console.log(this.name + " heals themselves for: "+ healRoll + "!");
+        this.hpStat = this.hpStat + healRoll;
+        document.getElementById(this.hpTag).style.width = this.hpStat + '%';
+    }
 
 
 
