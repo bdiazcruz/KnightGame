@@ -100,6 +100,9 @@ function animate(){
 
     //create location variables for drawimage knight replace 50,500 with movement variables positioning
    
+
+
+
         
     if(gameFrame % staggerFrames == 0){
         if(frameX <maxFramesX){
@@ -148,6 +151,8 @@ document.getElementById('heal1').addEventListener('click', event =>{
 
     document.getElementById('heal1').style.display = 'block';
     document.getElementById('heal1').style.display = 'none';
+    document.getElementById('attack1').style.display = 'none';
+
 
     playerImage.src = './assets/SLKnight/Health.png'
     playerLocX = attackLoc1;
@@ -164,7 +169,8 @@ document.getElementById('heal1').addEventListener('click', event =>{
     setTimeout(()=>{
         setToIdle();
  
-        
+        document.getElementById('attack1').style.display = 'block';
+        document.getElementById('heal1').style.display = 'block';
      }, 2000)
 
 
@@ -179,10 +185,14 @@ document.getElementById('heal1').addEventListener('click', event =>{
 
 document.getElementById('attack1').addEventListener('click', event =>{
     player1.attack(player2);
+
+
+    
+
     
     document.getElementById('attack1').style.display = 'block';
     document.getElementById('attack1').style.display = 'none';
-    
+    document.getElementById('heal1').style.display = 'none';
 
 
 
@@ -248,6 +258,8 @@ document.getElementById('attack1').addEventListener('click', event =>{
     setTimeout(()=>{
         setToIdle();
         document.getElementById('attack1').style.display = 'block';
+        document.getElementById('heal1').style.display = 'block';
+        setMessage("Select a Move!");
    }, 5000)
 
 
@@ -284,7 +296,9 @@ function setToIdle(){
 
 
 
-player1.attack(player2);
+
+
+//player1.attack(player2);
 
 
 //player1.attack(player2);

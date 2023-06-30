@@ -24,6 +24,9 @@ class fighter{
     }
     attack(target){
         console.log(this.name + " strikes his Target! for: " + this.attackStat +"!");
+        
+        setMessage(this.name + " strikes his Target! for: " + this.attackStat +"!");
+
         target.recieveDmg(this.attackStat);
     }
     heal(){
@@ -37,4 +40,9 @@ class fighter{
 
 
 
+
 } 
+
+function setMessage(messageTranscript){
+    document.getElementById('messageDisp').innerHTML = messageTranscript;
+}
