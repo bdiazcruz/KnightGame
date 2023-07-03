@@ -26,6 +26,10 @@ cloud2.src = './assets/BGDesertMountains/cloud4.png';
 const playerImage = new Image();
 playerImage.src = './assets/SLKnight/Idle.png';
 
+const enderImage = new Image();
+enderImage.src = './assets/SLKnight/Death.png';
+
+
 const spriteWidth = 128;
 const spriteHeight = 64;
 let frameX = 0;
@@ -77,7 +81,7 @@ const player1 = new fighter({
 
 const player2 = new fighter({
     hpStat: 100,
-    attackStat: 60,
+    attackStat: 100,
     defenseStat:5,
     name: "Enemy",
     hpTag: 'p2health3'
@@ -90,7 +94,111 @@ let cloud2X = 200;
 
 let gameEnd = false;
 
+
+let frameEndX = 0;
+let frameEndY = 0;
+let endLocX = CANVAS_WIDTH/2;
+let endLocY = CANVAS_HEIGHT/2;
+let maxFrameEndX = 0;
+let maxFrameEndY = 0;
+
+let endAnimFinished = false;
+
 function animate(){
+
+  
+
+    if(gameEnd == false){
+        battleAnim();
+    }
+
+    
+    if(player1.hpStat <1 && gameEnd == false){
+
+        gameEnd = true;
+        
+        maxFrameEndX = 1;
+        maxFrameEndY = 1;
+        /*
+        playerImage.src = './assets/SLKnight/Pray.png'
+        playerLocX = attackLoc1;
+        frameX = 0;
+        frameY = 0;
+        maxFramesX = 1;
+        maxFramesY = 1;
+        frameYLocked = 0;
+*/
+    }
+
+
+    if(gameEnd == true && player1.hpStat<1){
+        defeatEnd();
+    }
+
+    
+
+
+    gameFrame++;
+    let animationId = requestAnimationFrame(animate);
+
+
+    /*
+    if(player1.hpStat<1 && gameEnd == false){
+        //window.cancelAnimationFrame(animationId);
+        //animateEnd1();
+        gameEnd = true;
+        playerImage.src = './assets/SLKnight/Death.png';
+        frameX = 0;
+        frameY = 0;
+        maxFramesX = 1;
+        maxFramesY = 1;
+        frameYLocked = 1;
+
+
+    }
+*/
+
+}
+
+animate();
+
+
+function defeatEnd(){
+
+    ctx.clearRect(0,0, CANVAS_WIDTH, CANVAS_HEIGHT);
+    ctx.fillRect(0,0,CANVAS_WIDTH,CANVAS_HEIGHT);
+
+    setMessage("DEFEAT!");
+    document.getElementById('heal1').style.display = 'none';
+    document.getElementById('attack1').style.display = 'none';
+    document.getElementById('dodge1').style.display = 'none';
+    document.getElementById('p1health1').style.display = 'none';
+    document.getElementById('p2health1').style.display = 'none';
+    ctx.drawImage(enderImage, frameEndX * spriteWidth , frameEndY * spriteHeight, spriteWidth, spriteHeight, endLocX -100, endLocY, spriteWidth*1.5, spriteHeight*1.5);
+
+    if(endAnimFinished == false){
+        setTimeout(()=>{
+            frameEndX = 1;
+     
+        }, 500)
+    
+        setTimeout(()=>{
+            frameEndX = 0;
+            frameEndY = 1;
+     
+        }, 1000)
+    
+        setTimeout(()=>{
+            frameEndX = 1;
+     
+        }, 1500)
+        endAnimFinished = true;
+    }
+
+}
+
+function battleAnim(){
+
     ctx.clearRect(0,0, CANVAS_WIDTH, CANVAS_HEIGHT);
     //ctx.fillRect(50, 50, 100, 100);
 
@@ -100,25 +208,14 @@ function animate(){
     ctx.drawImage(cloud1,cloud1X, 200);
     ctx.drawImage(cloud2,cloud2X, 20);
 
-
-
     ctx.drawImage(playerImage, frameX * spriteWidth , frameY * spriteHeight, spriteWidth, spriteHeight, playerLocX, playerLocY, spriteWidth*1.5, spriteHeight*1.5);
-
 
     //second character
 
-
     ctx.drawImage(playerImage2, frameX2* spriteWidth, frameY2 *spriteHeight, spriteWidth, spriteHeight, playerLocX2, playerLocY2, spriteWidth*1.5, spriteHeight*1.5);
-
 
     //create location variables for drawimage knight replace 50,500 with movement variables positioning
    
-
-
-   
-
-
-
     cloud1X = cloud1X - 0.05;
     if(cloud1X <-100){
         cloud1X = 620;
@@ -161,39 +258,6 @@ function animate(){
         }
         
     }
-
-
-
-
-    
-
-    gameFrame++;
-    let animationId = requestAnimationFrame(animate);
-
-
-    /*
-    if(player1.hpStat<1 && gameEnd == false){
-        //window.cancelAnimationFrame(animationId);
-        //animateEnd1();
-        gameEnd = true;
-        playerImage.src = './assets/SLKnight/Death.png';
-        frameX = 0;
-        frameY = 0;
-        maxFramesX = 1;
-        maxFramesY = 1;
-        frameYLocked = 1;
-
-
-    }
-*/
-
-}
-
-animate();
-
-
-function battleAnim(){
-
 }
 
 
