@@ -14,6 +14,9 @@ class fighter{
         this.hpStat = this.hpStat-attackerStat;
 
         document.getElementById(this.hpTag).style.width = this.hpStat + '%';
+        if(this.hpStat<1){
+            document.getElementById(this.hpTag).style.width = 0 + '%';
+        }
 
 
         console.log(" "+this.name+ "has been hit!")
@@ -23,18 +26,31 @@ class fighter{
         }
     }
     attack(target){
-        console.log(this.name + " strikes his Target! for: " + this.attackStat +"!");
-        
-        setMessage(this.name + " strikes his Target! for: " + this.attackStat +"!");
 
-        target.recieveDmg(this.attackStat);
+        let attackRandBuff = Math.floor(Math.random()*11);
+        let currAttackVal = attackRandBuff + this.attackStat;
+
+
+        console.log(this.name + " strikes his Target! for: " + currAttackVal +"!");
+        
+        setMessage(this.name + " strikes his Target! for: " + currAttackVal +"!");
+
+        target.recieveDmg(currAttackVal);
     }
     heal(){
 
         let healRoll = 10;
-        console.log(this.name + " heals themselves for: "+ healRoll + "!");
-        this.hpStat = this.hpStat + healRoll;
+        let healBuff = Math.floor(Math.random()*11);
+        let currHealVal = healBuff+healRoll;
+
+
+
+
+        console.log(this.name + " heals themselves for: "+ currHealVal + "!");
+        setMessage(this.name + " heals themselves for: " + currHealVal +"!");
+        this.hpStat = this.hpStat + currHealVal;
         document.getElementById(this.hpTag).style.width = this.hpStat + '%';
+        
     }
 
 

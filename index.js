@@ -15,6 +15,12 @@ backImg2.src = './assets/BGDesertMountains/background2.png';
 const backImg3 = new Image();
 backImg3.src = './assets/BGDesertMountains/background3.png';
 
+const cloud1 = new Image();
+cloud1.src = './assets/BGDesertMountains/cloud6.png';
+
+const cloud2 = new Image();
+cloud2.src = './assets/BGDesertMountains/cloud4.png';
+
 
 
 const playerImage = new Image();
@@ -63,23 +69,26 @@ let attackLoc2 = 250;
 
 const player1 = new fighter({
     hpStat: 100,
-    attackStat: 10,
+    attackStat: 20,
     defenseStat:5,
-    name: "player1",
+    name: "You",
     hpTag: 'p1health3'
 })
 
 const player2 = new fighter({
     hpStat: 100,
-    attackStat: 10,
+    attackStat: 60,
     defenseStat:5,
-    name: "player2",
+    name: "Enemy",
     hpTag: 'p2health3'
 })
 
+let cloud1X = 500;
+let cloud2X = 200;
 
 
 
+let gameEnd = false;
 
 function animate(){
     ctx.clearRect(0,0, CANVAS_WIDTH, CANVAS_HEIGHT);
@@ -88,6 +97,10 @@ function animate(){
     ctx.drawImage(backImg1,0,0);
     ctx.drawImage(backImg2,0,0);
     ctx.drawImage(backImg3,0,0);
+    ctx.drawImage(cloud1,cloud1X, 200);
+    ctx.drawImage(cloud2,cloud2X, 20);
+
+
 
     ctx.drawImage(playerImage, frameX * spriteWidth , frameY * spriteHeight, spriteWidth, spriteHeight, playerLocX, playerLocY, spriteWidth*1.5, spriteHeight*1.5);
 
@@ -102,7 +115,20 @@ function animate(){
    
 
 
+   
 
+
+
+    cloud1X = cloud1X - 0.05;
+    if(cloud1X <-100){
+        cloud1X = 620;
+    }
+
+    cloud2X = cloud2X - 0.03;
+    if(cloud2X <-100){
+        cloud2X = 620;
+    }
+   
         
     if(gameFrame % staggerFrames == 0){
         if(frameX <maxFramesX){
@@ -137,13 +163,108 @@ function animate(){
     }
 
 
+
+
     
 
     gameFrame++;
-    requestAnimationFrame(animate);
+    let animationId = requestAnimationFrame(animate);
+
+
+    /*
+    if(player1.hpStat<1 && gameEnd == false){
+        //window.cancelAnimationFrame(animationId);
+        //animateEnd1();
+        gameEnd = true;
+        playerImage.src = './assets/SLKnight/Death.png';
+        frameX = 0;
+        frameY = 0;
+        maxFramesX = 1;
+        maxFramesY = 1;
+        frameYLocked = 1;
+
+
+    }
+*/
+
 }
 
 animate();
+
+
+function battleAnim(){
+
+}
+
+
+
+
+
+
+
+
+
+/*
+function animateEnd1(){
+
+    let end1Id = window.requestAnimationFrame(animateEnd1);
+
+    ctx.clearRect(0,0, CANVAS_WIDTH, CANVAS_HEIGHT);
+    ctx.drawImage(playerImage, frameX * spriteWidth , frameY * spriteHeight, spriteWidth, spriteHeight, playerLocX, playerLocY, spriteWidth*1.5, spriteHeight*1.5);
+    ctx.drawImage(playerImage2, frameX2* spriteWidth, frameY2 *spriteHeight, spriteWidth, spriteHeight, playerLocX2, playerLocY2, spriteWidth*1.5, spriteHeight*1.5);
+
+
+
+    playerImage.src = './assets/SLKnight/Attack.png'
+    playerLocX = attackLoc1;
+    frameX = 0;
+    frameY = 0;
+    maxFramesX = 2;
+    maxFramesY = 2;
+    frameYLocked = 1;
+
+    if(gameFrame % staggerFrames == 0){
+        if(frameX <maxFramesX){
+            frameX++;
+        } 
+        else frameX = 0;
+        if(frameYLocked == 1){
+            if(frameY <maxFramesY){
+            
+                frameY++;
+            } 
+            else frameY = 0;
+        }
+        
+    }
+
+
+    //player 2 anim frames
+    if(gameFrame % staggerFrames == 0){
+        if(frameX2 <maxFramesX2){
+            frameX2++;
+        } 
+        else frameX2 = 0;
+        if(frameYLocked2 == 1){
+            if(frameY2 <maxFramesY2){
+            
+                frameY2++;
+            } 
+            else frameY2 = 0;
+        }
+        
+    }
+
+
+
+    gameFrame++;
+}
+
+*/
+
+
+
+
 
 
 document.getElementById('heal1').addEventListener('click', event =>{
@@ -169,12 +290,18 @@ document.getElementById('heal1').addEventListener('click', event =>{
     setTimeout(()=>{
         setToIdle();
  
+    }, 2000)
+
+    setTimeout(()=>{
+        p2Attack();
+    },3000)
+
+    setTimeout(()=>{
+        setToIdle();
         document.getElementById('attack1').style.display = 'block';
         document.getElementById('heal1').style.display = 'block';
-     }, 2000)
-
-
-
+        setMessage("Select a Move!");
+    }, 5000)
 
 
 
@@ -225,32 +352,9 @@ document.getElementById('attack1').addEventListener('click', event =>{
        setToIdle();
     }, 2000)
 
-
     //retaliation player 2 auto
-   
-
     setTimeout(()=>{
-
-        playerImage.src = './assets/SLKnight/Hurt.png';
-        frameX=0;
-        frameY=0;
-        playerLocX = attackLoc1;
-        maxFramesX = 1;
-        maxFramesY = 0;
-        frameYLocked = 1;
-
-        player2.attack(player1);
-
-        //player2
-        playerImage2.src = './assets/SLKnight/Attacks.png'
-        playerLocX2 = attackLoc2;
-        frameX2 = 0;
-        frameY2 = 4;
-        maxFramesX2 = 7;
-        maxFramesY2 = 0;
-        frameYLocked2 = 0;
-
-
+        p2Attack();
     },3000)
 
 
@@ -287,6 +391,30 @@ function setToIdle(){
     
     //document.getElementById('attack1').style.display = 'block';
 }
+
+
+function p2Attack(){
+    playerImage.src = './assets/SLKnight/Hurt.png';
+    frameX=0;
+    frameY=0;
+    playerLocX = attackLoc1;
+    maxFramesX = 1;
+    maxFramesY = 0;
+    frameYLocked = 1;
+
+    player2.attack(player1);
+
+    //player2
+    playerImage2.src = './assets/SLKnight/Attacks2.png'
+    playerLocX2 = attackLoc2;
+    frameX2 = 0;
+    frameY2 = 4;
+    maxFramesX2 = 7;
+    maxFramesY2 = 0;
+    frameYLocked2 = 0;
+
+}
+
 
 
 
