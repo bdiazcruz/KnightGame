@@ -30,6 +30,10 @@ class fighter{
         let attackRandBuff = Math.floor(Math.random()*11);
         let currAttackVal = attackRandBuff + this.attackStat;
 
+        let swordAudio = new Audio("./assets/Swishes/Swishes26.wav");
+        swordAudio.volume = 1;
+        swordAudio.play();
+
 
         console.log(this.name + " strikes his Target! for: " + currAttackVal +"!");
         
@@ -38,6 +42,10 @@ class fighter{
         target.recieveDmg(currAttackVal);
     }
     heal(){
+
+        let healAudio = new Audio("./assets/sounds/healSound.wav");
+        healAudio.play();
+
 
         let healRoll = 10;
         let healBuff = Math.floor(Math.random()*11);

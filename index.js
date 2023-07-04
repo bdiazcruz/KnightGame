@@ -30,6 +30,13 @@ const enderImage = new Image();
 enderImage.src = './assets/SLKnight/Death.png';
 
 
+//audio part
+//let swordAudio = new Audio("./assets/Swishes/Swishes26.wav");
+let endAudio = new Audio('./assets/sounds/endSound.wav');
+
+
+
+
 const spriteWidth = 128;
 const spriteHeight = 64;
 let frameX = 0;
@@ -73,7 +80,7 @@ let attackLoc2 = 250;
 
 const player1 = new fighter({
     hpStat: 100,
-    attackStat: 20,
+    attackStat: 100,
     defenseStat:5,
     name: "You",
     hpTag: 'p1health3'
@@ -81,7 +88,7 @@ const player1 = new fighter({
 
 const player2 = new fighter({
     hpStat: 100,
-    attackStat: 100,
+    attackStat: 20,
     defenseStat:5,
     name: "Enemy",
     hpTag: 'p2health3'
@@ -104,30 +111,28 @@ let maxFrameEndY = 0;
 
 let endAnimFinished = false;
 
+let startAudio = new Audio("./assets/sounds/starterLoop.wav");
+
+let counter = 0;
+
 function animate(){
 
-  
+
 
     if(gameEnd == false){
         battleAnim();
     }
 
     
-    if(player1.hpStat <1 && gameEnd == false){
+    if((player1.hpStat <1 && gameEnd == false) || (player2.hpStat <1 && gameEnd == false)){
 
         gameEnd = true;
+        startAudio.pause();
+        endAudio.play();
         
         maxFrameEndX = 1;
         maxFrameEndY = 1;
-        /*
-        playerImage.src = './assets/SLKnight/Pray.png'
-        playerLocX = attackLoc1;
-        frameX = 0;
-        frameY = 0;
-        maxFramesX = 1;
-        maxFramesY = 1;
-        frameYLocked = 0;
-*/
+       
     }
 
 
@@ -135,6 +140,10 @@ function animate(){
         defeatEnd();
     }
 
+    if(gameEnd == true && player2.hpStat<1){
+        enderImage.src = './assets/SLKnight/Pray.png';
+        victoryEnd();
+    }
     
 
 
@@ -162,6 +171,7 @@ function animate(){
 
 animate();
 
+//26 33 sound files
 
 function defeatEnd(){
 
@@ -179,6 +189,8 @@ function defeatEnd(){
     if(endAnimFinished == false){
         setTimeout(()=>{
             frameEndX = 1;
+            let deathAudio = new Audio("./assets/sounds/deathAlex.wav");
+            deathAudio.play();
      
         }, 500)
     
@@ -197,7 +209,46 @@ function defeatEnd(){
 
 }
 
+function victoryEnd(){
+
+    ctx.clearRect(0,0, CANVAS_WIDTH, CANVAS_HEIGHT);
+    ctx.fillRect(0,0,CANVAS_WIDTH,CANVAS_HEIGHT);
+
+    setMessage("Victory!");
+    document.getElementById('heal1').style.display = 'none';
+    document.getElementById('attack1').style.display = 'none';
+    document.getElementById('dodge1').style.display = 'none';
+    document.getElementById('p1health1').style.display = 'none';
+    document.getElementById('p2health1').style.display = 'none';
+    ctx.drawImage(enderImage, frameEndX * spriteWidth , frameEndY * spriteHeight, spriteWidth, spriteHeight, endLocX -100, endLocY, spriteWidth*1.5, spriteHeight*1.5);
+
+    if(endAnimFinished == false){
+        setTimeout(()=>{
+            frameEndX = 1;
+            let sighAudio = new Audio("./assets/sounds/sighSean.wav");
+            sighAudio.play();
+     
+        }, 500)
+    
+        setTimeout(()=>{
+            frameEndX = 0;
+            frameEndY = 1;
+     
+        }, 1000)
+    
+        setTimeout(()=>{
+            frameEndX = 1;
+     
+        }, 1500)
+        endAnimFinished = true;
+    }
+
+}
+
+
+
 function battleAnim(){
+
 
     ctx.clearRect(0,0, CANVAS_WIDTH, CANVAS_HEIGHT);
     //ctx.fillRect(50, 50, 100, 100);
@@ -260,74 +311,67 @@ function battleAnim(){
     }
 }
 
+document.getElementById('dodge1').addEventListener('click', event =>{
+    
+    
+    document.getElementById('heal1').style.display = 'block';
+    document.getElementById('heal1').style.display = 'none';
+    document.getElementById('attack1').style.display = 'none';
+    document.getElementById('dodge1').style.display = 'none';
+    let rollChance = Math.floor(Math.random() *10);
 
+    if(rollChance % 2 == 0){
+        let rollAudio = new Audio("./assets/sounds/rollSound.wav");
+        rollAudio.play();
 
+        setMessage('You dodged successfully!');
+        playerImage.src = './assets/SLKnight/Roll.png'
+        playerLocX = attackLoc1;
+        frameX = 0;
+        frameY = 0;
+        maxFramesX = 1;
+        maxFramesY = 1;
+        frameYLocked = 1;
 
+    setTimeout(()=>{
+        setToIdle();
+ 
+    }, 2000)
 
+    setTimeout(()=>{
+         setToIdle();
+        document.getElementById('attack1').style.display = 'block';
+        document.getElementById('heal1').style.display = 'block';
+        document.getElementById('dodge1').style.display = 'block';
+        setMessage("Select a Move!");
+    },3000)
 
+    }else{
+       setMessage('You failed to dodge!');
 
+        
+        setTimeout(()=>{
+            p2Attack();
+        }, 2000)
 
+        setTimeout(()=>{
+            setToIdle();
+        document.getElementById('attack1').style.display = 'block';
+        document.getElementById('heal1').style.display = 'block';
+        document.getElementById('dodge1').style.display = 'block';
+        setMessage("Select a Move!");
+        }, 4000)
 
-/*
-function animateEnd1(){
-
-    let end1Id = window.requestAnimationFrame(animateEnd1);
-
-    ctx.clearRect(0,0, CANVAS_WIDTH, CANVAS_HEIGHT);
-    ctx.drawImage(playerImage, frameX * spriteWidth , frameY * spriteHeight, spriteWidth, spriteHeight, playerLocX, playerLocY, spriteWidth*1.5, spriteHeight*1.5);
-    ctx.drawImage(playerImage2, frameX2* spriteWidth, frameY2 *spriteHeight, spriteWidth, spriteHeight, playerLocX2, playerLocY2, spriteWidth*1.5, spriteHeight*1.5);
-
-
-
-    playerImage.src = './assets/SLKnight/Attack.png'
-    playerLocX = attackLoc1;
-    frameX = 0;
-    frameY = 0;
-    maxFramesX = 2;
-    maxFramesY = 2;
-    frameYLocked = 1;
-
-    if(gameFrame % staggerFrames == 0){
-        if(frameX <maxFramesX){
-            frameX++;
-        } 
-        else frameX = 0;
-        if(frameYLocked == 1){
-            if(frameY <maxFramesY){
-            
-                frameY++;
-            } 
-            else frameY = 0;
-        }
         
     }
+    
 
 
-    //player 2 anim frames
-    if(gameFrame % staggerFrames == 0){
-        if(frameX2 <maxFramesX2){
-            frameX2++;
-        } 
-        else frameX2 = 0;
-        if(frameYLocked2 == 1){
-            if(frameY2 <maxFramesY2){
-            
-                frameY2++;
-            } 
-            else frameY2 = 0;
-        }
-        
-    }
+    
 
+    
 
-
-    gameFrame++;
-}
-
-*/
-
-
-
+})
 
 
 
@@ -337,7 +381,7 @@ document.getElementById('heal1').addEventListener('click', event =>{
     document.getElementById('heal1').style.display = 'block';
     document.getElementById('heal1').style.display = 'none';
     document.getElementById('attack1').style.display = 'none';
-
+    document.getElementById('dodge1').style.display = 'none';
 
     playerImage.src = './assets/SLKnight/Health.png'
     playerLocX = attackLoc1;
@@ -346,10 +390,6 @@ document.getElementById('heal1').addEventListener('click', event =>{
     maxFramesX = 1;
     maxFramesY = 3;
     frameYLocked = 1;
-
-
-
-
 
     setTimeout(()=>{
         setToIdle();
@@ -364,13 +404,9 @@ document.getElementById('heal1').addEventListener('click', event =>{
         setToIdle();
         document.getElementById('attack1').style.display = 'block';
         document.getElementById('heal1').style.display = 'block';
+        document.getElementById('dodge1').style.display = 'block';
         setMessage("Select a Move!");
     }, 5000)
-
-
-
-
-
 
 })
 
@@ -384,6 +420,7 @@ document.getElementById('attack1').addEventListener('click', event =>{
     document.getElementById('attack1').style.display = 'block';
     document.getElementById('attack1').style.display = 'none';
     document.getElementById('heal1').style.display = 'none';
+    document.getElementById('dodge1').style.display = 'none';
 
 
 
@@ -408,6 +445,7 @@ document.getElementById('attack1').addEventListener('click', event =>{
     maxFramesY2 = 0;
     frameYLocked2 = 1;
 
+    
 
     
 
@@ -427,6 +465,7 @@ document.getElementById('attack1').addEventListener('click', event =>{
         setToIdle();
         document.getElementById('attack1').style.display = 'block';
         document.getElementById('heal1').style.display = 'block';
+        document.getElementById('dodge1').style.display = 'block';
         setMessage("Select a Move!");
    }, 5000)
 
@@ -479,30 +518,30 @@ function p2Attack(){
 
 }
 
+let clicked = false;
+addEventListener('click', ()=>{
+    if(!clicked){
+        startAudio.volume = 0.2;
+        startAudio.play();
+        clicked = true
+    }
+    
+})
 
 
 
 
 
+//assets used
+
+/*
+https://alkakrab.itch.io/free-medieval-soundtrack-no-copyright
+https://darthdeus.itch.io/free-combat-music-pack-vol-1
+https://dillonbecker.itch.io/sdap
+https://makotohiramatsu.itch.io/swishes
+https://szadiart.itch.io/background-desert-mountains
+https://szadiart.itch.io/2d-soulslike-character
+https://leohpaz.itch.io/rpg-essentials-sfx-free
+*/
 
 
-
-
-
-
-//player1.attack(player2);
-
-
-//player1.attack(player2);
-//player1.attack(player2);
-
-//player1.attack(player2);
-//player1.attack(player2);
-
-//player1.attack(player2);
-//player1.attack(player2);
-
-//player1.attack(player2);
-//player1.attack(player2);
-
-//player1.attack(player2);
