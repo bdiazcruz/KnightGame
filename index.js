@@ -33,7 +33,7 @@ enderImage.src = './assets/SLKnight/Death.png';
 //audio part
 //let swordAudio = new Audio("./assets/Swishes/Swishes26.wav");
 let endAudio = new Audio('./assets/sounds/endSound.wav');
-
+endAudio.volume = 0.2;
 
 
 
@@ -80,7 +80,7 @@ let attackLoc2 = 250;
 
 const player1 = new fighter({
     hpStat: 100,
-    attackStat: 100,
+    attackStat: 20,
     defenseStat:5,
     name: "You",
     hpTag: 'p1health3'
@@ -523,7 +523,10 @@ addEventListener('click', ()=>{
     if(!clicked){
         startAudio.volume = 0.2;
         startAudio.play();
-        clicked = true
+        clicked = true;
+        document.getElementById('startCover').style.display = 'none';
+        document.getElementById('startHeader').style.display = 'none';
+
     }
     
 })
